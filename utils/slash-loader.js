@@ -1,5 +1,5 @@
-const db2 = require("../helpers/database.js")
-const end = require("../helpers/end.js")
+const db2 = require("../helpers/database-giveaway.js")
+const end = require("../helpers/end-giveaway.js")
 const db3 = require("../helpers/database-poll.js")
 
 const end2 = require("../helpers/end-poll.js")
@@ -13,12 +13,12 @@ module.exports = async(client, interaction) => {
   client.commands = new Collection()
   
   client.contextMenus = new Collection()
-  var files = readdirSync("./Slash") 
+  var files = readdirSync("./commands") 
   var props;
 
   for(var file in files) {
       console.log(`[SLASH COMMAND] | Loaded: ${files[file]}`)
-      var props = require(`../Slash/` + files[file])
+      var props = require(`../commands/` + files[file])
       client.commands.set(files[file].replace(".js", ""), props)
   }
 
