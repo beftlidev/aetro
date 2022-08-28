@@ -22,8 +22,36 @@ const {
 const komut = new JsonDatabase({
     databasePath:"./databases/komut.json" 
 });
+const verifieduser = new JsonDatabase({
+    databasePath:"./databases/User/verified.json" 
+});
+const coin = new JsonDatabase({
+    databasePath:"./databases/Economy/coin.json" 
+});
+const buttonrole = new JsonDatabase({
+    databasePath:"./databases/Moderation/buttonrole.json" 
+});
+const channels = new JsonDatabase({
+    databasePath:"./databases/Moderation/channels.json" 
+});
+const giveaway = new JsonDatabase({
+    databasePath:"./databases/Giveaway/giveaway.json" 
+});
+const poll = new JsonDatabase({
+    databasePath:"./databases/Poll/poll.json" 
+});
+const ticket = new JsonDatabase({
+    databasePath:"./databases/Moderation/ticket.json" 
+});
 
 client.komut = komut
+client.verifieduser = verifieduser
+client.coin = coin
+client.buttonrole = buttonrole
+client.channels = channels
+client.giveaway = giveaway
+client.poll = poll
+client.ticket = ticket
 
 client.login("");
 
@@ -34,7 +62,7 @@ const { Op } = require("sequelize")
 const { bold } = require("@discordjs/builders")
 const { userMention, time: timestamp } = require("@discordjs/builders")
 const { v4: uuidv4 } = require("uuid")
-const db2 = require("./helpers/database.js") 
+const db2 = require("./helpers/database-giveaway.js") 
 
 if(interaction.customId == "reroll") {
 
@@ -45,14 +73,14 @@ if(!interaction.member.permissions.has('MANAGE_EVENTS') && !interaction.member.r
             });
         }
 const id = interaction.message.id
-const giveaway2 = db.fetch(`giveaway_${id}`)
+const giveaway2 = await client.giveaway.fetch(`giveaway_${id}`)
 const giveaway = await db2.Giveaways.findOne({
 where: { uuid: giveaway2 },
 })
 
-if(!db.fetch(`gw_ended_${id}`)) {
+if(!await client.giveaway.fetch(`gw_ended_${id}`)) {
 interaction.reply({content: "<:sgs_error:973476189979160616> This giveaway is not over yet, please try to reroll the winner after the draw ends."}) 
-} else if(db.fetch(`gw_deleted_${id}`) === "deleted") {
+} else if(await client.giveaway.fetch(`gw_deleted_${id}`) === "deleted") {
 interaction.reply({content: `<:sgs_cross:921392930185445376> This giveaway has been deleted, so you can\'t take any action!`}) 
 } else {
 
@@ -102,7 +130,7 @@ interaction.reply({embeds: [embed], components: [row]})
 
 if(interaction.customId == 'cekilis') {
    
-    const giveaway2 = db.fetch(`giveaway_${interaction.message.id}`)
+    const giveaway2 = await client.giveaway.fetch(`giveaway_${interaction.message.id}`)
     const giveaway = await db2.Giveaways.findOne({
     where: { uuid: giveaway2 },
     })
@@ -198,8 +226,8 @@ await interaction.update({embeds: [embed]})
                                 })
     if (result[1]) {
 
-db.add(`giveaway_entrants_${interaction.message.id}`, 1)
-let mrb = db.fetch(`giveaway_entrants_${interaction.message.id}`)
+await client.giveaway.add(`giveaway_entrants_${interaction.message.id}`, 1)
+let mrb = await client.giveaway.fetch(`giveaway_entrants_${interaction.message.id}`)
 
 let rol;
 if(giveaway.requirements !== "null") {
@@ -208,7 +236,7 @@ rol = `<@&${giveaway.requirements}>`
 rol = "No"
 }
 
-const desc = db.fetch(`giveaway_desc_${interaction.message.id}`)
+const desc = await client.giveaway.fetch(`giveaway_desc_${interaction.message.id}`)
 const mew = client.users.cache.get(giveaway.userId)
         const embed = new MessageEmbed()
             .setColor('#2F3136') 
@@ -240,7 +268,7 @@ await interaction.update({embeds: [embed]})
     }
     
     }
-    if(interaction.customId === "cekilis_dbl") {
+  /*  if(interaction.customId === "cekilis_dbl") {
     
     const Topgg = require("@top-gg/sdk")
     const dbl = new Topgg.Api(db.fetch(`cekilis_topgg_token_${interaction.guild.id}_${interaction.message.id}`)) 
@@ -303,7 +331,8 @@ await interaction.update({embeds: [embed]})
     }) 
     
     
-    } 
+    } */
+
 })
 
 client.on("messageCreate", message => {
@@ -318,8 +347,8 @@ client.on("interactionCreate", async (button) => {
 
     if (button.customId == "ticket_ac") {
 
-    let Category = db.fetch(`ticket_kategori_${button.guild.id}`);
-    let Role = db.fetch(`ticket_rol_${button.guild.id}`);
+    let Category = await client.ticket.fetch(`ticket_kategori_${button.guild.id}`);
+    let Role = await client.ticket.fetch(`ticket_rol_${button.guild.id}`);
     const ticketChannel = await button.guild.channels.create(
       `${button.user.username}`,
       {
@@ -450,7 +479,7 @@ if (url !== null) {m.content = url}
     response.push(`${m.author.tag} | ${m.content}`)})
 await button.channel.send({embeds: [new Discord.MessageEmbed()	
 .setColor('#0099ff')
-.setTitle('<:sgs_tick:973476146391945246> I back up messages sent to Ticket...')]})
+.setTitle('👍 I back up messages sent to Ticket...')]})
 let attach = new Discord.MessageAttachment(Buffer.from(response.toString().replaceAll(',', '\n'), 'utf-8'),`${button.channel.name}.txt`)
 setTimeout(async () => {await button.channel.send({ content: `<:sgs_tick:973476146391945246> \`${button.channel.name}\` I transferred ticket \'s messages to the file below.`, files: [attach]})}, 3000)
 
@@ -458,23 +487,23 @@ setTimeout(async () => {await button.channel.send({ content: `<:sgs_tick:9734761
     
     if(button.customId == "oylamaevet") {
 
-if(db.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
 button.reply({content: `<:sgs_error:973476189979160616> You responded NO to the survey! To give a YES reaction, withdraw the NO reaction.`, ephemeral: true})
 
 } else {
 
-if(db.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
-await db.delete(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`) 
+await client.poll.delete(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`) 
 
-await db.subtract(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.subtract(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
 
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 
@@ -491,15 +520,15 @@ button.update({embeds: [embed]})
 
 } else {
 
-await db.set(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
+await client.poll.set(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
 
-await db.add(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.add(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
 
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 
@@ -520,23 +549,23 @@ button.update({embeds: [embed]})
 
 if(button.customId == "oylamahayır") {
 
-if(db.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
 button.reply({content: `<:sgs_error:973476189979160616> You responded YES to the survey! To give a NO reaction, withdraw the YES reaction.`, ephemeral: true})
 
 } else {
 
-if(db.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
-await db.delete(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`) 
+await client.poll.delete(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`) 
 
-await db.subtract(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.subtract(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
 
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 
@@ -552,15 +581,15 @@ const embed = new Discord.MessageEmbed()
 button.update({embeds: [embed]}) 
 
 } else {
-await db.set(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
+await client.poll.set(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
 
-await db.add(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.add(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
 
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 
@@ -591,26 +620,26 @@ const { userMention, time: timestamp } = require("@discordjs/builders")
 const db2 = require("./helpers/database-poll.js") 
 
 if(button.customId == "oylamaevet_timed") {
-const polldb2 = db.fetch(`poll_${button.message.id}`)
+const polldb2 = await client.poll.fetch(`poll_${button.message.id}`)
 
     const polldb = await db2.Polls.findOne({
 
     where: { uuid: polldb2 },
 
     })
-if(db.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 button.reply({content: `<:sgs_error:973476189979160616> You responded NO to the survey! To give a YES reaction, withdraw the NO reaction.`, ephemeral: true})
 } else {
 
-if(db.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
-await db.delete(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`) 
-await db.subtract(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.delete(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`) 
+await client.poll.subtract(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 .setTitle("Poll started! 🎉")
@@ -624,13 +653,13 @@ button.update({embeds: [embed]})
 
 } else {
 
-await db.set(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
-await db.add(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.set(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
+await client.poll.add(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 .setTitle("Poll started! 🎉")
@@ -647,26 +676,26 @@ button.update({embeds: [embed]})
 }
 
 if(button.customId == "oylamahayır_timed") {
-const polldb2 = db.fetch(`poll_${button.message.id}`)
+const polldb2 = await client.poll.fetch(`poll_${button.message.id}`)
 
     const polldb = await db2.Polls.findOne({
 
     where: { uuid: polldb2 },
 
     })
-if(db.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 button.reply({content: `<:sgs_error:973476189979160616> You responded YES to the survey! To give a NO reaction, withdraw the YES reaction.`, ephemeral: true})
 } else {
 
-if(db.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
+if(await client.poll.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
-await db.delete(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`) 
-await db.subtract(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.delete(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`) 
+await client.poll.subtract(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 .setTitle("Poll started! 🎉")
@@ -680,13 +709,13 @@ button.update({embeds: [embed]})
 
 } else {
 
-await db.set(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
-await db.add(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
+await client.poll.set(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`, "katildi") 
+await client.poll.add(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`, 1)
 
-let evetdb = db.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
-let hayırdb = db.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
+let evetdb = await client.poll.fetch(`oylama_katilim_evet_${button.guild.id}_${button.message.id}`)
+let hayırdb = await client.poll.fetch(`oylama_katilim_hayır_${button.guild.id}_${button.message.id}`)
 
-let query = db.fetch(`oylama_${button.guild.id}_${button.message.id}`)
+let query = await client.poll.fetch(`oylama_${button.guild.id}_${button.message.id}`)
 
 const embed = new Discord.MessageEmbed() 
 .setTitle("Poll started! 🎉")
@@ -705,7 +734,7 @@ button.update({embeds: [embed]})
 
 if (button.customId === "buton_rol") {
 
-let rol = db.fetch(`buton_rol_${button.message.id}_${button.guild.id}`)
+let rol = await client.buttonrole.fetch(`buton_rol_${button.message.id}_${button.guild.id}`)
 
 if (button.member.roles.cache.get(rol)) {
 
@@ -724,7 +753,7 @@ button.reply({content: '<:sgs_tick:973476146391945246> I have successfully assig
 
 
 if(button.customId === "onayli") {
-if(db.fetch(`onaylı_kullanıcı_başvuru_durum_${button.user.id}`) === 'yes') {
+if(await client.verifieduser.fetch(`onaylı_kullanıcı_başvuru_durum_${button.user.id}`) === 'yes') {
 button.reply({content: `<:sgs_cross:973476220585013318> You\'ve already applied!`, ephemeral: true})
 } else {
     const moment = require('moment')
@@ -767,20 +796,20 @@ new MessageButton()
       .setLabel("")
       .setCustomId("ticket_kapat")
 );
-db.set(`onaylı_kullanıcı_başvuru_durum_${button.user.id}`, `yes`) 
+await client.verifieduser.set(`onaylı_kullanıcı_başvuru_durum_${button.user.id}`, `yes`) 
     ticketChannel.send({content: `<@&`+ Role +`>`, embeds: [ticketEmbed], components: [row]}).then(msg => {
 msg.pin()
-db.set(`onaylı_kullanıcı_başvuru_${msg.id}`, button.user.id)
+await client.verifieduser.set(`onaylı_kullanıcı_başvuru_${msg.id}`, button.user.id)
 }) 
 } 
 } 
 
 if(button.customId === "onayla_kullanici") {
-let user = db.fetch(`onaylı_kullanıcı_başvuru_${button.message.id}`) 
+let user = await client.verifieduser.fetch(`onaylı_kullanıcı_başvuru_${button.message.id}`) 
 let u = client.users.cache.get(user) 
-db.set(`onaylı_kullanıcı_${user}`, `evet`)
-db.set(`onaylı_kullanıcı_rozet_${user}`, `<:onayli:973476532951613440>`)
-db.delete(`onaylı_kullanıcı_başvuru_${button.message.id}`)
+await client.verifieduser.set(`onaylı_kullanıcı_${user}`, `evet`)
+await client.verifieduser.set(`onaylı_kullanıcı_rozet_${user}`, `EMOJI`)
+await client.verifieduser.delete(`onaylı_kullanıcı_başvuru_${button.message.id}`)
 const embed = new Discord.MessageEmbed() 
 .setDescription('🎉 Approved user application accepted, congratulations! If you want, come to our support server below, send this message to the gallery channel and get a special role!') 
 .setColor('#2F3136') 
@@ -797,10 +826,10 @@ u.send({embeds: [embed], components: [row]})
 } 
 
 if(button.customId === "reddet_kullanici") {
-let user = db.fetch(`onaylı_kullanıcı_başvuru_${button.message.id}`) 
+let user = await client.verifieduser.fetch(`onaylı_kullanıcı_başvuru_${button.message.id}`) 
 let u = client.users.cache.get(user) 
-db.delete(`onaylı_kullanıcı_başvuru_durum_${user}`)
-db.delete(`onaylı_kullanıcı_başvuru_${button.message.id}`) 
+await client.verifieduser.delete(`onaylı_kullanıcı_başvuru_durum_${user}`)
+await client.verifieduser.delete(`onaylı_kullanıcı_başvuru_${button.message.id}`) 
 const embed = new Discord.MessageEmbed() 
 .setDescription(`😔 Unfortunately, your application was rejected! If you have a complaint, come to our support server below and report it.
 Reason for rejection: The account wasn\'t opened a month ago. `) 
