@@ -43,6 +43,9 @@ const poll = new JsonDatabase({
 const ticket = new JsonDatabase({
     databasePath:"./databases/Moderation/ticket.json" 
 });
+const message = new JsonDatabase({
+    databasePath:"./databases/User/message.json" 
+});
 
 client.komut = komut
 client.verifieduser = verifieduser
@@ -52,8 +55,14 @@ client.channels = channels
 client.giveaway = giveaway
 client.poll = poll
 client.ticket = ticket
+client.message = message
 
 client.login("");
+
+client.on('messageCreate', async(message) => {
+if(message.author.bot) return;
+    await client.message.add(`toplam_mesaj_${message.guild.id}_${message.author.id}`,1)
+   })
 
 require("./utils/slash-loader.js")(client)
 
