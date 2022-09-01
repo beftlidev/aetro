@@ -18,7 +18,7 @@ new MessageButton()
 .setStyle('LINK')
 .setLabel('Web Site')
 .setEmoji('🌐')
-.setURL('https://spacegw.xyz/')
+.setURL('https://aetro.xyz/')
 ) 
 
 const Teyit = await client.komut.all().filter(data => data.ID.startsWith(`komut_`)).sort((a, b) => b.data - a.data)
@@ -34,20 +34,20 @@ const embed = new Discord.MessageEmbed()
     .setColor("RANDOM") 
     .setAuthor("Space Giveaway Info") 
 .setDescription(`**• General Statistics**
-<:server_req:973476419214643260> Total servers: **${guildd}**
-<:wumpus_sgs:973476021552693288> Total Users: **${userr}**
+${await client.emoji.fetch(`server`)} Total servers: **${guildd}**
+${await client.emoji.fetch(`user`)} Total Users: **${userr}**
 **• Server Information**
 🏓 Ping: **${client.ws.ping}**
 **• Versions**
-<:discord_javascript:973484720287518721> Discord.js Version: **${Discord.version}**
-<:node:973476585342652417> Node.js Version: **16.13.2**
-<:kitap:973487096889217024> Bot Version: **1.8.3**
+${await client.emoji.fetch(`djs`)} Discord.js Version: **${Discord.version}**
+${await client.emoji.fetch(`node`)} Node.js Version: **16.13.2**
+${await client.emoji.fetch(`kitap`)} Bot Version: **1.8.3**
 **• Bot Statistics**
 💾 Memory Usage: **${(process.memoryUsage().heapUsed / 2024 / 2024).toFixed(2)} / 8 GB**
 **• Command Statistics**
 💻 Total Commands: **${client.commands.size}**
 💻 Most used command: **${FinalDB.replace('undefined','Unknown command.')}**
-<:sgs_slash:973476174762217482> Total Command Usage: **${db.fetch(`bot_using`)}**`)  
+${await client.emoji.fetch(`slash`)} Total Command Usage: **${db.fetch(`bot_using`)}**`)  
 .setTimestamp() 
 interaction.reply({ embeds: [embed], components: [row]}) 
 
