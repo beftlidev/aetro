@@ -48,7 +48,7 @@ const kanal = k || interaction.channel
 
      if(!interaction.member.permissions.has('MANAGE_MESSAGES')){
             return interaction.reply({
-                content: '<:sgs_error:973476189979160616> You must have permissions to manage messages to start poll.',
+                content: `${await client.emoji.fetch(`no`)} You must have permissions to manage messages to start poll.`,
                 ephemeral: true
             });
        }
@@ -73,7 +73,7 @@ const kanal = k || interaction.channel
 const embed = new Discord.MessageEmbed() 
 .setTitle("Poll started! 🎉")
 .setDescription(`${desc}
-<:msgreq:973476621212344380> 👍 0 👎 0`) 
+${await client.emoji.fetch(`message`)} 👍 0 👎 0`) 
 .setColor("BLURPLE") 
 .setTimestamp() 
 
@@ -109,7 +109,7 @@ const uuid = uuidv4()
 
      if(!interaction.member.permissions.has('MANAGE_MESSAGES')){
             return interaction.reply({
-                content: '<:sgs_error:973476189979160616> You must have permissions to manage messages to start poll.',
+                content: `${await client.emoji.fetch(`no`)} You must have permissions to manage messages to start poll.`,
                 ephemeral: true
             });
        }
@@ -145,7 +145,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 .setDescription(`${desc}
 ⏰ Ends: ${timestamp(Math.floor(ends / 1000), "R")} (${timestamp(Math.floor(ends / 1000))})
-<:msgreq:973476621212344380> 👍 0 👎 0`) 
+${await client.emoji.fetch(`message`)} 👍 0 👎 0`) 
 .setColor("BLURPLE") 
 .setTimestamp() 
 
@@ -165,7 +165,7 @@ new MessageButton()
             .setLabel("")
             .setStyle("LINK")
             .setEmoji("⏰")
-            .setURL(`http://spacegw.xyz/?end=${ends}`), 
+            .setURL(`http://aetro.xyz/?end=${ends}`), 
 );
  await modalSubmitInteraction.reply({
             content: `🎉 Ok! The poll was launched on ${kanal} channel!`,
