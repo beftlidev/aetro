@@ -28,6 +28,9 @@ const verifieduser = new JsonDatabase({
 const coin = new JsonDatabase({
     databasePath:"./databases/Economy/coin.json" 
 });
+const economy = new JsonDatabase({
+    databasePath:"./databases/Economy/settings.json" 
+});
 const buttonrole = new JsonDatabase({
     databasePath:"./databases/Moderation/buttonrole.json" 
 });
@@ -46,22 +49,32 @@ const ticket = new JsonDatabase({
 const message = new JsonDatabase({
     databasePath:"./databases/User/message.json" 
 });
+const emoji = new JsonDatabase({
+    databasePath:"./databases/Emojis/emojis.json" 
+});
 
 client.komut = komut
 client.verifieduser = verifieduser
 client.coin = coin
+client.economy = economy
 client.buttonrole = buttonrole
 client.channels = channels
 client.giveaway = giveaway
 client.poll = poll
 client.ticket = ticket
 client.message = message
+client.emoji = emoji
 
 client.login("");
 
 client.on('messageCreate', async(message) => {
 if(message.author.bot) return;
+if(await client.economy.fetch(`aktif_${message.guild.id}`)) {
+await client.coin.add(`coin_${message.guild.id}_${message.author.id}`,1)
     await client.message.add(`toplam_mesaj_${message.guild.id}_${message.author.id}`,1)
+} else {
+await client.message.add(`toplam_mesaj_${message.guild.id}_${message.author.id}`,1)
+}
    })
 
 require("./utils/slash-loader.js")(client)
