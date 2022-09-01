@@ -90,7 +90,7 @@ if(interaction.customId == "reroll") {
 
 if(!interaction.member.permissions.has('MANAGE_EVENTS') && !interaction.member.roles.cache.some((r) => r.name === "Giveaways")){
             return interaction.reply({
-                content: '<:sgs_error:973476189979160616> You must have permissions to \`Manage Events\` or \`Giveaways\` role to manage the giveaway.',
+                content: `${await client.emoji.fetch(`no`)} You must have permissions to \`Manage Events\` or \`Giveaways\` role to manage the giveaway.`,
                 ephemeral: true
             });
         }
@@ -101,9 +101,9 @@ where: { uuid: giveaway2 },
 })
 
 if(!await client.giveaway.fetch(`gw_ended_${id}`)) {
-interaction.reply({content: "<:sgs_error:973476189979160616> This giveaway is not over yet, please try to reroll the winner after the draw ends."}) 
+interaction.reply({content: `${await client.emoji.fetch(`no`)} This giveaway is not over yet, please try to reroll the winner after the draw ends.`}) 
 } else if(await client.giveaway.fetch(`gw_deleted_${id}`) === "deleted") {
-interaction.reply({content: `<:sgs_cross:921392930185445376> This giveaway has been deleted, so you can\'t take any action!`}) 
+interaction.reply({content: `${await client.emoji.fetch(`no`)} This giveaway has been deleted, so you can\'t take any action!`}) 
 } else {
 
         const entrants = await db2.Entrants.findAll({
@@ -158,14 +158,14 @@ if(interaction.customId == 'cekilis') {
     })
     if (!giveaway2)
     return interaction.reply({
-    content: "There was an error. Please try again later.",
+    content: `${await client.emoji.fetch(`error`)} There was an error. Please try again later.`,
     ephemeral: true,
     })
     
             if(giveaway.requirements !== 'null') {
               if (!interaction.guild.members.cache.get(interaction.user.id).roles.cache.has(giveaway.requirements)) {
               return await interaction.reply({
-                content: "<:sgs_cross:921392930185445376> You do not have the required roles to enter this giveaway.",
+                content: `${await client.emoji.fetch(`no`)} You do not have the required roles to enter this giveaway.`,
                 ephemeral: true,
               })
             }
@@ -205,17 +205,17 @@ const desc = db.fetch(`giveaway_desc_${interaction.message.id}`)
 const mew = client.users.cache.get(giveaway.userId)
         const embed = new MessageEmbed()
             .setColor('#2F3136') 
-            .setTitle(`<:gift:973484715917054002> ${giveaway.item}`)
-            .setDescription(`<:sgs_tick:973476146391945246> Click on the button below to enter the giveaway!
+            .setTitle(`${await client.emoji.fetch(`gift`)} ${giveaway.item}`)
+            .setDescription(`${await client.emoji.fetch(`yes`)} Click on the button below to enter the giveaway!
 📘 ${desc}`)
-            .addField(`**• Giveaway Information**`, `<:sgc_owner:973476240507932712> Giveaway Owner: ${mew} (\`${mew.tag}\`) \n<:msgreq:973476621212344380> Entrants: **${mrb} (Chance: \`%${Number(100/mrb).toFixed(1)}\`)** \n🏆 Winners: **${giveaway.winners}** \n⏰ Ends: ${timestamp(Math.floor(giveaway.endDate / 1000), "R")} (${timestamp(Math.floor(giveaway.endDate / 1000))})`)
-            .addField("**• Requirements**", `<:role_req:973476432967786506> Role Requirement: ${rol}`,
+            .addField(`**• Giveaway Information**`, `${await client.emoji.fetch(`owner`)} Giveaway Owner: ${mew} (\`${mew.tag}\`) \n${await client.emoji.fetch(`message`)} Entrants: **${mrb} (Chance: \`%${Number(100/mrb).toFixed(1)}\`)** \n🏆 Winners: **${giveaway.winners}** \n⏰ Ends: ${timestamp(Math.floor(giveaway.endDate / 1000), "R")} (${timestamp(Math.floor(giveaway.endDate / 1000))})`)
+            .addField("**• Requirements**", `${await client.emoji.fetch(`role`)} Role Requirement: ${rol}`,
             )
             .setTimestamp()
 
 await interaction.update({embeds: [embed]})
                   await interaction.reply({
-                  content: `<:sgs_tick:921392926683197460> You entered the giveaway successfully!`,
+                  content: `${await client.emoji.fetch(`yes`)} You entered the giveaway successfully!`,
                   ephemeral: true,
                   })
                   } else {
@@ -223,7 +223,7 @@ await interaction.update({embeds: [embed]})
 
 
                   await interaction.reply({
-                  content: "<:sgs_error:921392927568195645> You already entered this giveaway.",
+                  content: `${await client.emoji.fetch(`no`)} You already entered this giveaway.`,
                   ephemeral: true,
                   })
                   }
@@ -262,18 +262,18 @@ const desc = await client.giveaway.fetch(`giveaway_desc_${interaction.message.id
 const mew = client.users.cache.get(giveaway.userId)
         const embed = new MessageEmbed()
             .setColor('#2F3136') 
-            .setTitle(`<:gift:973484715917054002> ${giveaway.item}`)
-            .setDescription(`<:sgs_tick:973476146391945246> Click on the button below to enter the giveaway!
+            .setTitle(`${await client.emoji.fetch(`gift`)} ${giveaway.item}`)
+            .setDescription(`${await client.emoji.fetch(`yes`)} Click on the button below to enter the giveaway!
 📘 ${desc}`)
-            .addField(`**• Giveaway Information**`, `<:sgc_owner:973476240507932712> Giveaway Owner: ${mew} (\`${mew.tag}\`) \n<:msgreq:973476621212344380> Entrants: **${mrb} (Chance: \`%${Number(100/mrb).toFixed(1)}\`)** \n🏆 Winners: **${giveaway.winners}** \n⏰ Ends: ${timestamp(Math.floor(giveaway.endDate / 1000), "R")} (${timestamp(Math.floor(giveaway.endDate / 1000))})`)
-            .addField("**• Requirements**", `<:role_req:973476432967786506> Role Requirement: ${rol}`,
+            .addField(`**• Giveaway Information**`, `${await client.emoji.fetch(`owner`)} Giveaway Owner: ${mew} (\`${mew.tag}\`) \n${await client.emoji.fetch(`message`)} Entrants: **${mrb} (Chance: \`%${Number(100/mrb).toFixed(1)}\`)** \n🏆 Winners: **${giveaway.winners}** \n⏰ Ends: ${timestamp(Math.floor(giveaway.endDate / 1000), "R")} (${timestamp(Math.floor(giveaway.endDate / 1000))})`)
+            .addField("**• Requirements**", `${await client.emoji.fetch(`role`)} Role Requirement: ${rol}`,
             )
             .setTimestamp()
 
 await interaction.update({embeds: [embed]})
 
     await interaction.reply({
-    content: `<:sgs_tick:921392926683197460> You entered the giveaway successfully!`,
+    content: `${await client.emoji.fetch(`no`)} You entered the giveaway successfully!`,
     ephemeral: true,
     })
     } else {
@@ -282,7 +282,7 @@ await interaction.update({embeds: [embed]})
 
 
     await interaction.reply({
-    content: "<:sgs_error:921392927568195645> You already entered this giveaway.",
+    content: `${await client.emoji.fetch(`no`)} You already entered this giveaway.`,
     ephemeral: true,
     })
     }
@@ -388,7 +388,7 @@ SEND_MESSAGES: true
      SEND_MESSAGES: true
     });
     ticketChannel.permissionOverwrites.create(button.guild.id, {  VIEW_CHANNEL: false })
-button.reply({content: `<:sgs_tick:973476146391945246> Ticket created successfully! ( <#${ticketChannel.id}> )`, ephemeral: true}) 
+button.reply({content: `${await client.emoji.fetch(`yes`)} Ticket created successfully! ( <#${ticketChannel.id}> )`, ephemeral: true}) 
     const ticketEmbed = new MessageEmbed()
       .setDescription(
         `You can click on the button below to take any action about Ticket.`
@@ -397,7 +397,7 @@ const row = new MessageActionRow()
 			.addComponents(
     new MessageButton()
       .setStyle("SECONDARY")
-.setEmoji('973476220585013318') 
+.setEmoji('❌') 
       .setLabel("Close")
       .setCustomId("ticket_kapat")
 );
@@ -414,7 +414,7 @@ const row = new MessageActionRow()
     new MessageButton()
       .setStyle("SECONDARY")
       .setLabel("Close")
-.setEmoji('973476220585013318') 
+.setEmoji('❌') 
       .setCustomId("ticket_kapat")
 );
 const embed = new Discord.MessageEmbed() 
@@ -427,7 +427,7 @@ button.update({embeds: [embed], components: [row]})
 
 const embed = new Discord.MessageEmbed() 
 .setDescription(`🔓 - Ticket opens it back. 
-<:sgs_cross:973476220585013318> - Ticket deletes completely. 
+❌ - Ticket deletes completely. 
 📜 - Backs up Ticket messages into a txt file.
 `)
 .setColor('#0099ff')
@@ -441,7 +441,7 @@ new MessageButton()
     new MessageButton() 
 .setStyle("SECONDARY")
 .setLabel("")
-.setEmoji("973476220585013318")
+.setEmoji("❌")
 .setCustomId("ticket_sil"), 
 new MessageButton() 
 .setStyle("SUCCESS")
@@ -464,7 +464,7 @@ new MessageButton()
     new MessageButton() 
 .setStyle("SECONDARY")
 .setLabel("")
-.setEmoji("973476220585013318")
+.setEmoji("❌")
 .setDisabled(true)
 .setCustomId("ticket_sil"), 
 new MessageButton() 
@@ -476,7 +476,7 @@ new MessageButton()
 ) 
 
 const embed = new Discord.MessageEmbed() 
-.setDescription('<:sgs_tick:973476146391945246> Ticket will be closed in 10 seconds...')
+.setDescription('${await client.emoji.fetch(`yes`)} Ticket will be closed in 10 seconds...')
 button.channel.send({embeds: [embed]}) 
 const embed2 = new Discord.MessageEmbed() 
 .setDescription('Deleting channel. You can\'t take any action!') 
@@ -503,7 +503,7 @@ await button.channel.send({embeds: [new Discord.MessageEmbed()
 .setColor('#0099ff')
 .setTitle('👍 I back up messages sent to Ticket...')]})
 let attach = new Discord.MessageAttachment(Buffer.from(response.toString().replaceAll(',', '\n'), 'utf-8'),`${button.channel.name}.txt`)
-setTimeout(async () => {await button.channel.send({ content: `<:sgs_tick:973476146391945246> \`${button.channel.name}\` I transferred ticket \'s messages to the file below.`, files: [attach]})}, 3000)
+setTimeout(async () => {await button.channel.send({ content: `${await client.emoji.fetch(`yes`)} \`${button.channel.name}\` I transferred ticket \'s messages to the file below.`, files: [attach]})}, 3000)
 
 }   
     
@@ -511,7 +511,7 @@ setTimeout(async () => {await button.channel.send({ content: `<:sgs_tick:9734761
 
 if(await client.poll.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
-button.reply({content: `<:sgs_error:973476189979160616> You responded NO to the survey! To give a YES reaction, withdraw the NO reaction.`, ephemeral: true})
+button.reply({content: `${await client.emoji.fetch(`no`)} You responded NO to the survey! To give a YES reaction, withdraw the NO reaction.`, ephemeral: true})
 
 } else {
 
@@ -532,7 +532,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 
 .setDescription(`${query}
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 
 .setColor("BLURPLE") 
 
@@ -557,7 +557,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 
 .setDescription(`${query}
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 
 .setColor("BLURPLE") 
 
@@ -573,7 +573,7 @@ if(button.customId == "oylamahayır") {
 
 if(await client.poll.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
 
-button.reply({content: `<:sgs_error:973476189979160616> You responded YES to the survey! To give a NO reaction, withdraw the YES reaction.`, ephemeral: true})
+button.reply({content: `${await client.emoji.fetch(`no`)} You responded YES to the survey! To give a NO reaction, withdraw the YES reaction.`, ephemeral: true})
 
 } else {
 
@@ -594,7 +594,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 
 .setDescription(`${query}
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 
 .setColor("BLURPLE") 
 
@@ -618,7 +618,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 
 .setDescription(`${query}
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 
 .setColor("BLURPLE") 
 
@@ -650,7 +650,7 @@ const polldb2 = await client.poll.fetch(`poll_${button.message.id}`)
 
     })
 if(await client.poll.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
-button.reply({content: `<:sgs_error:973476189979160616> You responded NO to the survey! To give a YES reaction, withdraw the NO reaction.`, ephemeral: true})
+button.reply({content: `${await client.emoji.fetch(`no`)} You responded NO to the survey! To give a YES reaction, withdraw the NO reaction.`, ephemeral: true})
 } else {
 
 if(await client.poll.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
@@ -667,7 +667,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 .setDescription(`${query}
 ⏰ Ends: ${timestamp(Math.floor(polldb.endDate / 1000), "R")} (${timestamp(Math.floor(polldb.endDate / 1000))})
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 .setColor("BLURPLE") 
 .setTimestamp() 
 
@@ -687,7 +687,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 .setDescription(`${query}
 ⏰ Ends: ${timestamp(Math.floor(polldb.endDate / 1000), "R")} (${timestamp(Math.floor(polldb.endDate / 1000))})
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 .setColor("BLURPLE") 
 .setTimestamp() 
 
@@ -706,7 +706,7 @@ const polldb2 = await client.poll.fetch(`poll_${button.message.id}`)
 
     })
 if(await client.poll.fetch(`oylama_katildi_evet_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
-button.reply({content: `<:sgs_error:973476189979160616> You responded YES to the survey! To give a NO reaction, withdraw the YES reaction.`, ephemeral: true})
+button.reply({content: `${await client.emoji.fetch(`no`)} You responded YES to the survey! To give a NO reaction, withdraw the YES reaction.`, ephemeral: true})
 } else {
 
 if(await client.poll.fetch(`oylama_katildi_hayır_${button.user.id}_${button.guild.id}_${button.message.id}`)) {
@@ -723,7 +723,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 .setDescription(`${query}
 ⏰ Ends: ${timestamp(Math.floor(polldb.endDate / 1000), "R")} (${timestamp(Math.floor(polldb.endDate / 1000))})
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 .setColor("BLURPLE") 
 .setTimestamp() 
 
@@ -743,7 +743,7 @@ const embed = new Discord.MessageEmbed()
 .setTitle("Poll started! 🎉")
 .setDescription(`${query}
 ⏰ Ends: ${timestamp(Math.floor(polldb.endDate / 1000), "R")} (${timestamp(Math.floor(polldb.endDate / 1000))})
-<:msgreq:973476621212344380> 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
+${await client.emoji.fetch(`message`)} 👍 ${evetdb || "0"} 👎 ${hayırdb || "0"}`) 
 .setColor("BLURPLE") 
 .setTimestamp() 
 
@@ -761,12 +761,12 @@ let rol = await client.buttonrole.fetch(`buton_rol_${button.message.id}_${button
 if (button.member.roles.cache.get(rol)) {
 
 await button.member.roles.remove(rol);
-button.reply({content: '<:sgs_tick:973476146391945246> I have successfully reclaimed the role of <@&'+ rol +'> from you.', ephemeral: true}) 
+button.reply({content: `${await client.emoji.fetch(`yes`)} I have successfully reclaimed the role of <@&`+ rol +`> from you.`, ephemeral: true}) 
 
 } else {
 
 await button.member.roles.add(rol);
-button.reply({content: '<:sgs_tick:973476146391945246> I have successfully assigned you the role of <@&'+ rol +'>.', ephemeral: true}) 
+button.reply({content: `${await client.emoji.fetch(`yes`)} I have successfully assigned you the role of <@&`+ rol +`>.`, ephemeral: true}) 
 
 }
 
@@ -776,11 +776,11 @@ button.reply({content: '<:sgs_tick:973476146391945246> I have successfully assig
 
 if(button.customId === "onayli") {
 if(await client.verifieduser.fetch(`onaylı_kullanıcı_başvuru_durum_${button.user.id}`) === 'yes') {
-button.reply({content: `<:sgs_cross:973476220585013318> You\'ve already applied!`, ephemeral: true})
+button.reply({content: `${await client.emoji.fetch(`no`)} You\'ve already applied!`, ephemeral: true})
 } else {
     const moment = require('moment')
-    let Category = "973462202898063360" 
-    let Role = "973462157826084865" 
+    let Category = "1012995198931980350" 
+    let Role = "1012988618085769236" 
     const ticketChannel = await client.guilds.cache.get('752164000418234448').channels.create(
       `✅ - ${button.user.username}`,
       {
@@ -794,11 +794,11 @@ button.reply({content: `<:sgs_cross:973476220585013318> You\'ve already applied!
      SEND_MESSAGES: true
     });
     ticketChannel.permissionOverwrites.create(button.guild.id, {  VIEW_CHANNEL: false })
-button.reply({content: `<:sgs_tick:973476146391945246> The application was successfully made and will be returned within 24-48 hours! If no return is made, your application has been rejected.`, ephemeral: true}) 
+button.reply({content: `${await client.emoji.fetch(`yes`)} The application was successfully made and will be returned within 24-48 hours! If no return is made, your application has been rejected.`, ephemeral: true}) 
     const ticketEmbed = new MessageEmbed()
       .setDescription(
         `Bilet hakkında herhangi bir işlem yapmak için aşağıdaki düğmeye tıklayabilirsiniz.
-<:sgs_tick:973476146391945246> Hesap oluşturulma tarihi: ${moment.utc(button.guild.members.cache.get(button.user.id).user.createdAt).format('DD/MM/YYYY')}`
+${await client.emoji.fetch(`yes`)} Hesap oluşturulma tarihi: ${moment.utc(button.guild.members.cache.get(button.user.id).user.createdAt).format('DD/MM/YYYY')}`
       );
 const row = new MessageActionRow()
 			.addComponents(
@@ -814,7 +814,7 @@ new MessageButton()
 .setCustomId('reddet_kullanici'), 
     new MessageButton()
       .setStyle("SECONDARY")
-.setEmoji('921392930185445376') 
+.setEmoji('❌') 
       .setLabel("")
       .setCustomId("ticket_kapat")
 );
@@ -830,7 +830,7 @@ if(button.customId === "onayla_kullanici") {
 let user = await client.verifieduser.fetch(`onaylı_kullanıcı_başvuru_${button.message.id}`) 
 let u = client.users.cache.get(user) 
 await client.verifieduser.set(`onaylı_kullanıcı_${user}`, `evet`)
-await client.verifieduser.set(`onaylı_kullanıcı_rozet_${user}`, `EMOJI`)
+await client.verifieduser.set(`onaylı_kullanıcı_rozet_${user}`, `${await client.emoji.fetch(`verfied`)}`)
 await client.verifieduser.delete(`onaylı_kullanıcı_başvuru_${button.message.id}`)
 const embed = new Discord.MessageEmbed() 
 .setDescription('🎉 Approved user application accepted, congratulations! If you want, come to our support server below, send this message to the gallery channel and get a special role!') 
@@ -841,9 +841,9 @@ new MessageButton()
 .setStyle('LINK')
 .setLabel('Support Server')
 .setEmoji('')
-.setURL('https://discord.gg/KZfAEjrPUF') 
+.setURL('https://discord.gg/VZWm9KKmCp') 
 ) 
-button.reply({content: '<:onayli:973476532951613440> Başvuru kabul edildi!'}) 
+button.reply({content: 'Başvuru kabul edildi!'}) 
 u.send({embeds: [embed], components: [row]})
 } 
 
@@ -862,9 +862,9 @@ new MessageButton()
 .setStyle('LINK')
 .setLabel('Support Server')
 .setEmoji('')
-.setURL('https://discord.gg/KZfAEjrPUF') 
+.setURL('https://discord.gg/VZWm9KKmCp') 
 ) 
-button.reply({content: '<:onayli:973476532951613440> Başvuru reddedildi!'}) 
+button.reply({content: 'Başvuru reddedildi!'}) 
 u.send({embeds: [embed], components: [row]})
 }
 
