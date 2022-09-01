@@ -145,7 +145,7 @@ if (!Number(winners) || Number(winners) < 1) {
             .setDescription(`${await client.emoji.fetch(`yes`)} Click on the button below to enter the giveaway!
 📘 ${desc}`)
             .addField(`**• Giveaway Information**`, `${await client.emoji.fetch(`owner`)} Giveaway Owner: ${user} (\`${user.tag}\`) \n${await client.emoji.fetch(`message`)} Entrants: **0 (Chance: \`%0\`)** \n🏆 Winners: **${winners}** \n⏰ Ends: ${timestamp(Math.floor(ends / 1000), "R")} (${timestamp(Math.floor(ends / 1000))})`)
-            .addField("**• Requirements**", `${await client.emoji.fetch(`role`)} Role Requirement: ${role_req || 'No'}`,
+            .addField(`**• Requirements**`, `${await client.emoji.fetch(`role`)} Role Requirement: ${role_req || 'No'}`,
             )
             .setTimestamp()
 
