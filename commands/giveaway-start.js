@@ -61,7 +61,7 @@ const user = u || interaction.user
 
 if(!interaction.member.permissions.has('MANAGE_EVENTS') && !interaction.member.roles.cache.some((r) => r.name === "Giveaways")){
             return interaction.reply({
-                content: '<:sgs_error:973476189979160616> You must have permissions to \`Manage Events\` or \`Giveaways\` role to start the giveaway.',
+                content: `${await client.emoji.fetch(`no`)} You must have permissions to \`Manage Events\` or \`Giveaways\` role to start the giveaway.`,
                 ephemeral: true
             });
         }
@@ -116,13 +116,13 @@ const ends = Date.now() + ms(duration)
 
 if(!channel.isText()) {
            return modalSubmitInteraction.reply({
-             content: '<:sgs_error:973476189979160616> The selected channel is not text-based.',
+             content: `${await client.emoji.fetch(`no`)} The selected channel is not text-based.`,
                 ephemeral: true
             });
         }
 if (!Number(winners) || Number(winners) < 1) {
       return modalSubmitInteraction.reply({
-        content: '<:sgs_error:973476189979160616> Please specify a winner count above 0!',
+        content: `${await client.emoji.fetch(`no`)} Please specify a winner count above 0!`,
       })
     }
 
@@ -136,16 +136,16 @@ if (!Number(winners) || Number(winners) < 1) {
             .setLabel("")
             .setStyle("LINK")
             .setEmoji("⏰")
-            .setURL(`http://spacegw.xyz/?end=${ends}`), 
+            .setURL(`http://aetro.xyz/?end=${ends}`), 
     )
 
         const embed = new MessageEmbed()
             .setColor('#2F3136') 
-            .setTitle(`<:gift:973484715917054002> ${prize}`)
-            .setDescription(`<:sgs_tick:973476146391945246> Click on the button below to enter the giveaway!
+            .setTitle(`${await client.emoji.fetch(`gift`)} ${prize}`)
+            .setDescription(`${await client.emoji.fetch(`yes`)} Click on the button below to enter the giveaway!
 📘 ${desc}`)
-            .addField(`**• Giveaway Information**`, `<:sgc_owner:973476240507932712> Giveaway Owner: ${user} (\`${user.tag}\`) \n<:msgreq:973476621212344380> Entrants: **0 (Chance: \`%0\`)** \n🏆 Winners: **${winners}** \n⏰ Ends: ${timestamp(Math.floor(ends / 1000), "R")} (${timestamp(Math.floor(ends / 1000))})`)
-            .addField("**• Requirements**", `<:role_req:973476432967786506> Role Requirement: ${role_req || 'No'}`,
+            .addField(`**• Giveaway Information**`, `${await client.emoji.fetch(`owner`)} Giveaway Owner: ${user} (\`${user.tag}\`) \n${await client.emoji.fetch(`message`)} Entrants: **0 (Chance: \`%0\`)** \n🏆 Winners: **${winners}** \n⏰ Ends: ${timestamp(Math.floor(ends / 1000), "R")} (${timestamp(Math.floor(ends / 1000))})`)
+            .addField("**• Requirements**", `${await client.emoji.fetch(`role`)} Role Requirement: ${role_req || 'No'}`,
             )
             .setTimestamp()
 
