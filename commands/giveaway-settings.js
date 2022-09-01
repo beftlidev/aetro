@@ -53,10 +53,12 @@ const embed = new Discord.MessageEmbed()
   const message = await interaction.reply({embeds: [embed], components: [row]})
 
 await client.giveaway.set(`gw_settings_user_${message.id}`, `${interaction.user.id}`)
-
+await client.giveaway.set(`gw_settings_id_${message.id}`, `${id}`)
 
     setTimeout(async () => {
 await client.giveaway.delete(`gw_settings_user_${message.id}`)
+await client.giveaway.delete(`gw_settings_id_${message.id}`)
+message.edit({content: `${await client.emoji.fetch(`no`)} This command has expired.`, embeds: [], components: []})
 }, 300000)
 
 
