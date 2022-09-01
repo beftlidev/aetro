@@ -21,7 +21,7 @@ module.exports = {
 
 if(!interaction.member.permissions.has('MANAGE_EVENTS')){
             return interaction.reply({
-                content: '<:sgs_error:973476189979160616> You must have permissions to \`Manage Events\` role to manage the poll.',
+                content: `${await client.emoji.fetch(`no`)} You must have permissions to \`Manage Events\` role to manage the poll.`,
                 ephemeral: true
             });
         }
@@ -32,9 +32,9 @@ where: { uuid: poll2 },
 })
 
 if(await client.poll.fetch(`poll_ended_${id}`) === "ended") {
-interaction.reply({content: "<:sgs_cross:973476220585013318> This poll is already over!"}) 
+interaction.reply({content: `${await client.emoji.fetch(`no`)} This poll is already over!`}) 
 } else {
-    interaction.reply({content: `<:sgs_tick:973476146391945246> Poll Ended!`})
+    interaction.reply({content: `${await client.emoji.fetch(`yes`)} Poll Ended!`})
 
         await client.poll.set(`poll_ended_${id}`,`ended`)
 const guildPrefs = await db2.GuildPrefs.findOne({
