@@ -23,7 +23,7 @@ const row = new MessageActionRow()
 new Discord.MessageButton() 
 .setStyle("LINK") 
 .setLabel("My support server") 
-.setURL(""), 
+.setURL("https://discord.gg/VZWm9KKmCp"), 
 new Discord.MessageButton() 
 .setStyle("LINK") 
 .setLabel("My voting link") 
