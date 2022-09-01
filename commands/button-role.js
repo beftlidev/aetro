@@ -39,10 +39,6 @@ module.exports = {
 {name: 'Star Emoji', value: '⭐'}, 
 {name: 'World Emoji', value: '🌐'}, 
 {name: 'Bell emoji', value: '🔔'}, 
-{name: 'Developer Badge Emoji', value: '973476287496745000'}, 
-{name: 'Pen Emoji', value: '973487128346521631'}, 
-{name: 'Waving Emoji', value: '973486268317065286'}, 
-{name: 'Vote Emoji', value: '973476072953876480'},
 ], 
             required: true
         }, 
@@ -72,7 +68,7 @@ if(await client.verifieduser.fetch(`onaylı_kullanıcı_${interaction.user.id}`)
 
 if(!interaction.member.permissions.has('ADMINISTRATOR')){
             return interaction.reply({
-                content: '<:sgs_error:973476189979160616> You must have permissions to administrator to create a button role.',
+                content: '${await client.emoji.fetch(`no`)} You must have permissions to administrator to create a button role.',
                 ephemeral: true
             });
         }
@@ -110,7 +106,7 @@ new MessageButton()
 .setStyle('LINK')
 .setLabel('Support Server')
 .setEmoji('')
-.setURL('https://discord.gg/KZfAEjrPUF') 
+.setURL('https://discord.gg/VZWm9KKmCp') 
 ) 
 interaction.reply({content: mesaj, components: [onay]}) 
 }
