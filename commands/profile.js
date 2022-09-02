@@ -35,7 +35,65 @@ const embed = new Discord.MessageEmbed()
 .setColor('BLUE')
 .setImage(`${u}`)
 
-interaction.reply({embeds: [embed]})
+let a;
+let c;
+let activities = message.guild.members.cache.get(message.author.id).presence.activities.length
+if(activities == 2) {
+a = message.guild.members.cache.get(message.author.id).presence.activities[1].name;
+c = message.guild.members.cache.get(message.author.id).presence.activities[1];
+} else if(activities == 1) {
+a = message.guild.members.cache.get(message.author.id).presence.activities[0].name;
+c = message.guild.members.cache.get(message.author.id).presence.activities[0];
+} else if(activities == 0) {
+a = "empty";
+}
+
+let b;
+if(a === "Spotify") {
+b = `${await client.emoji.fetch(`spotify`)} Listening to **Spotify**
+🎵 Song: ${c.details}
+👥 Artist: ${c.state}
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>, End <t:${parseInt(c.timestamps.end / 1000)}:R>`;
+} else if(a === "Minecraft") {
+b = `${await client.emoji.fetch(`minecraft`)} Playing **Minecraft**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "Lunar Client") {
+b = `${await client.emoji.fetch(`lunarclient`)} Playing **Lunar Client**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "Visual Studio Code") {
+b = `${await client.emoji.fetch(`vsc`)} Playing **Visual Studio Code**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "ROBLOX") {
+b = `${await client.emoji.fetch(`roblox`)} Playing **ROBLOX**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "YouTube") {
+b = `${await client.emoji.fetch(`youtube`)} Watching **YouTube**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "CraftRise") {
+b = `${await client.emoji.fetch(`craftrise`)} Playing **CraftRise**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "SonOyuncu Minecraft Client") {
+b = `${await client.emoji.fetch(`so`)} Playing **SonOyuncu Minecraft Client**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "VALORANT") {
+b = `${await client.emoji.fetch(`valorant`)} Playing **VALORANT**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "LabyMod") {
+b = `${await client.emoji.fetch(`labymod`)} Playing **LabyMod**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "League of Legends") {
+b = `${await client.emoji.fetch(`lol`)} Playing **League of Legends**
+⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
+} else if(a === "empty") {
+b = `❔ Nothing is playing.`;
+} else {
+b = `❔ Nothing is playing.`;
+}
+
+const embed2 = new Discord.MessageEmbed()
+.setDescription(`${b}`)
+
+interaction.reply({embeds: [embed, embed2]})
 
 } 
 }
