@@ -68,7 +68,7 @@ if(await client.verifieduser.fetch(`onaylı_kullanıcı_${interaction.user.id}`)
 
 if(!interaction.member.permissions.has('ADMINISTRATOR')){
             return interaction.reply({
-                content: '${await client.emoji.fetch(`no`)} You must have permissions to administrator to create a button role.',
+                content: `${await client.emoji.fetch(`no`)} You must have permissions to administrator to create a button role.`,
                 ephemeral: true
             });
         }
