@@ -37,13 +37,13 @@ const embed = new Discord.MessageEmbed()
 
 let a;
 let c;
-let activities = message.guild.members.cache.get(message.author.id).presence.activities.length
+let activities = interaction.guild.members.cache.get(message.author.id).presence.activities.length
 if(activities == 2) {
-a = message.guild.members.cache.get(message.author.id).presence.activities[1].name;
-c = message.guild.members.cache.get(message.author.id).presence.activities[1];
+a = interaction.guild.members.cache.get(message.author.id).presence.activities[1].name;
+c = interaction.guild.members.cache.get(message.author.id).presence.activities[1];
 } else if(activities == 1) {
-a = message.guild.members.cache.get(message.author.id).presence.activities[0].name;
-c = message.guild.members.cache.get(message.author.id).presence.activities[0];
+a = interaction.guild.members.cache.get(message.author.id).presence.activities[0].name;
+c = interaction.guild.members.cache.get(message.author.id).presence.activities[0];
 } else if(activities == 0) {
 a = "empty";
 }
