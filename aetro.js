@@ -600,35 +600,34 @@ interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own th
 
 
 if(interaction.customId == "wg_yes") {
-interaction.message.delete()
+
 await client.channel.set(`welcome_goodbye_${interaction.guild.id}`, `${interaction.channelId}`)
 
 const embed = new Discord.MessageEmbed()
 .setDescription(`${await client.emoji.fetch(`yes`)} Channel set to (welcome - goodbye)!`)
 
-interaction.channel.send({embeds: [embed]})
+interaction.update({embeds: [embed]})
 
 }
 
 if(interaction.customId == "wg_no") {
 
-interaction.message.delete()
 
 const embed = new Discord.MessageEmbed()
 .setDescription(`${await client.emoji.fetch(`yes`)} Transaction cancelled!`)
 
-interaction.channel.send({embeds: [embed]})
+interaction.update({embeds: [embed]})
 
 }
 
 if(interaction.customId == "wg_off") {
-interaction.message.delete() 
+ 
 await client.channel.delete(`welcome_goodbye_${interaction.guild.id}`, `${interaction.channelId}`)
 
 const embed = new Discord.MessageEmbed()
 .setDescription(`${await client.emoji.fetch(`yes`)} (welcome - goodbye) has been deactivated!`)
 
-interaction.channel.send({embeds: [embed]})
+interaction.update({embeds: [embed]})
 
 }
 
