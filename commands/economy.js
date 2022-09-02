@@ -11,7 +11,7 @@ module.exports = {
     run: async (client, interaction) => {
 
 const embed = new Discord.MessageEmbed()
-.setTitle(`${await client.emoji.fetch(`slash`)} Economy commands`)
+.setTitle(`💵 Economy commands`)
 .setDescription(`Select the command you want to use below.`) 
 
 const row = new MessageActionRow().addComponents(
