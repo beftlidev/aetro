@@ -37,6 +37,9 @@ const buttonrole = new JsonDatabase({
 const channels = new JsonDatabase({
     databasePath:"./databases/Moderation/channels.json" 
 });
+const moderation = new JsonDatabase({
+    databasePath:"./databases/Moderation/moderation.json" 
+});
 const giveaway = new JsonDatabase({
     databasePath:"./databases/Giveaway/giveaway.json" 
 });
@@ -58,7 +61,8 @@ client.verifieduser = verifieduser
 client.coin = coin
 client.economy = economy
 client.buttonrole = buttonrole
-client.channels = channels
+client.channel = channels
+client.moderation = moderation
 client.giveaway = giveaway
 client.poll = poll
 client.ticket = ticket
@@ -357,7 +361,7 @@ await interaction.update({embeds: [embed]})
 
 if(interaction.customId == 'gw_end') {
 
-if(await client.giveaway.delete(`gw_settings_user_${interaction.message.id}`) === interaction.user.id) {
+if(await client.giveaway.fetch(`gw_settings_user_${interaction.message.id}`) === interaction.user.id) {
 
 const id = await client.giveaway.fetch(`gw_settings_id_${interaction.message.id}`)
 const giveaway2 = await client.giveaway.fetch(`giveaway_${id}`)
@@ -462,7 +466,7 @@ interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own th
 
 if(interaction.customId == 'gw_delete') {
 
-if(await client.giveaway.delete(`gw_settings_user_${interaction.message.id}`) === interaction.user.id) {
+if(await client.giveaway.fetch(`gw_settings_user_${interaction.message.id}`) === interaction.user.id) {
 
 const id = await client.giveaway.fetch(`gw_settings_id_${interaction.message.id}`)
 const giveaway2 = await client.giveaway.fetch(`giveaway_${id}`)
@@ -526,6 +530,117 @@ interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own th
 
 
 })
+
+
+
+client.on("interactionCreate", async (interaction) => {
+
+if(interaction.customId == "welcome_goodbye") {
+		await interaction.deferUpdate();
+if(await client.moderation.fetch(`moderation_user_${interaction.message.id}`) === interaction.user.id) {
+
+const embed= new Discord.MessageEmbed()
+.setDescription(`Select the action you want to do below.
+${await client.emoji.fetch(`yes`)} You make this channel (welcome - goodbye), ${await client.emoji.fetch(`no`)} You cancel the transaction, ${await client.emoji.fetch(`error`)} You turn off the system`)
+
+if(!await client.channel.fetch(`welcome_goodbye_${interaction.guild.id}`)) {
+
+const row = new MessageActionRow().addComponents(
+            new MessageButton()
+                .setCustomId('wg_yes')
+                .setLabel("")
+                .setStyle("PRIMARY")
+                .setEmoji(`${await client.emoji.fetch(`yesid`)}`), 
+            new MessageButton()
+                .setCustomId('wg_no')
+                .setLabel("")
+                .setStyle("PRIMARY")
+                .setEmoji(`${await client.emoji.fetch(`noid`)}`),
+            new MessageButton()
+                .setCustomId('wg_off')
+                .setLabel("")
+                .setStyle("PRIMARY")
+                .setDisabled(true)
+                .setEmoji(`${await client.emoji.fetch(`errorid`)}`),
+)
+
+interaction.channel.send({embeds: [embed], components: [row]})
+
+} else {
+
+const row = new MessageActionRow().addComponents(
+            new MessageButton()
+                .setCustomId('wg_yes')
+                .setLabel("")
+                .setStyle("PRIMARY")
+                .setEmoji(`${await client.emoji.fetch(`yesid`)}`), 
+            new MessageButton()
+                .setCustomId('wg_no')
+                .setLabel("")
+                .setStyle("PRIMARY")
+                .setEmoji(`${await client.emoji.fetch(`noid`)}`),
+            new MessageButton()
+                .setCustomId('wg_off')
+                .setLabel("")
+                .setStyle("PRIMARY")
+                .setEmoji(`${await client.emoji.fetch(`errorid`)}`),
+)
+
+interaction.channel.send({embeds: [embed], components: [row]})
+
+
+}
+
+
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+
+}
+
+
+if(interaction.customId == "wg_yes") {
+interaction.message.delete()
+await client.channel.set(`welcome_goodbye_${interaction.guild.id}`, `${interaction.channelId}`)
+
+const embed = new Discord.MessageEmbed()
+.setDescription(`${await client.emoji.fetch(`yes`)} Channel set to (welcome - goodbye)!`)
+
+interaction.channel.send({embeds: [embed]})
+
+}
+
+if(interaction.customId == "wg_no") {
+
+interaction.message.delete()
+
+const embed = new Discord.MessageEmbed()
+.setDescription(`${await client.emoji.fetch(`yes`)} Transaction cancelled!`)
+
+interaction.channel.send({embeds: [embed]})
+
+}
+
+if(interaction.customId == "wg_off") {
+interaction.message.delete() 
+await client.channel.delete(`welcome_goodbye_${interaction.guild.id}`, `${interaction.channelId}`)
+
+const embed = new Discord.MessageEmbed()
+.setDescription(`${await client.emoji.fetch(`yes`)} (welcome - goodbye) has been deactivated!`)
+
+interaction.channel.send({embeds: [embed]})
+
+}
+
+})
+
+// üye giriş çıkış ekle
+
+
+
+
+
+// level ekle
 
 client.on("messageCreate", message => {
   if (message.channel.type === "dm") return;
