@@ -51,7 +51,7 @@ a = "empty";
 let b;
 if(a === "Spotify") {
 b = `${await client.emoji.fetch(`spotify`)} Listening to **Spotify**
-🎵 Song: ${c.details}
+🎵 Song: [${c.details}](https://open.spotify.com/track/${c.ayncId})
 👥 Artist: ${c.state}
 ⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>, End <t:${parseInt(c.timestamps.end / 1000)}:R>`;
 } else if(a === "Minecraft") {
