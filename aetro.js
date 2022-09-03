@@ -34,7 +34,7 @@ const coin = new JsonDatabase({
     databasePath:"./databases/Economy/coin.json" 
 });
 const economy = new JsonDatabase({
-    databasePath:"./databases/Economy/settings.json" 
+    databasePath:"./databases/Economy/economy.json" 
 });
 const buttonrole = new JsonDatabase({
     databasePath:"./databases/Moderation/buttonrole.json" 
@@ -610,7 +610,7 @@ const row = new MessageActionRow().addComponents(
                 .setEmoji(`${await client.emoji.fetch(`errorid`)}`),
 )
 
-interaction.channel.send({embeds: [embed], components: [row]})
+interaction.update({embeds: [embed], components: [row]})
 
 } else {
 
@@ -632,7 +632,7 @@ const row = new MessageActionRow().addComponents(
                 .setEmoji(`${await client.emoji.fetch(`errorid`)}`),
 )
 
-interaction.channel.send({embeds: [embed], components: [row]})
+interaction.update({embeds: [embed], components: [row]})
 
 
 }
@@ -928,6 +928,44 @@ interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own th
 }
 
 })
+
+
+/*client.on("interactionCreate", async (interaction) => {
+
+if(interaction.customId == "eco_info") {
+
+if(await client.economy.fetch(`economy_user_${interaction.message.id}`) === interaction.user.id) {
+let coin = await client.coin.fetch(`coin_${interaction.guild.id}_${interaction.user.id}`)
+let bonus = await client.economy.fetch(`bonus_${interaction.guild.id}_${interaction.user.id}`)
+const embed = new Discord.MessageEmbed()
+.setDescription(`🪙 Coin: ${coin || "0"}
+🔺 Bonus: %${bonus || "0"}`)
+interaction.channel.send({embeds: [embed]})
+
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+
+}
+
+}
+
+if(interaction.customId == "slots") {
+
+if(await client.economy.fetch(`economy_user_${interaction.message.id}`) === interaction.user.id) {
+
+
+
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+
+}
+
+}
+
+})*/
+
 
 client.on("messageCreate", message => {
   if (message.channel.type === "dm") return;
