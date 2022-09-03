@@ -38,7 +38,7 @@ const message = await interaction.reply({embeds: [embed], components: [row]})
 await client.level.set(`level_user_${message.id}`, `${interaction.user.id}`)
     setTimeout(async () => {
 await client.level.delete(`level_user_${message.id}`)
-message.edit({content: `${await client.emoji.fetch(`no`)} This command has expired.`, embeds: [], components: []})
+message.delete()
 }, 300000)
 
 } else {
@@ -77,7 +77,7 @@ const message = await interaction.reply({embeds: [embed], components: [row, row2
 await client.level.set(`level_user_${message.id}`, `${interaction.user.id}`)
     setTimeout(async () => {
 await client.level.delete(`level_user_${message.id}`)
-message.edit({content: `${await client.emoji.fetch(`no`)} This command has expired.`, embeds: [], components: []})
+message.delete()
 }, 300000)
 
 } else {
@@ -86,7 +86,7 @@ const message = await interaction.reply({embeds: [embed], components: [row]})
 await client.level.set(`level_user_${message.id}`, `${interaction.user.id}`)
     setTimeout(async () => {
 await client.level.delete(`level_user_${message.id}`)
-message.edit({content: `${await client.emoji.fetch(`no`)} This command has expired.`, embeds: [], components: []})
+message.delete()
 }, 300000)
 
 }
