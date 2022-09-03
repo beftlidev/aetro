@@ -9,7 +9,7 @@ module.exports = {
     description: "💵 You get access to economy housing.",
   },
     run: async (client, interaction) => {
-
+await interaction.deferReply()
 const embed = new Discord.MessageEmbed()
 .setTitle(`💵 Economy commands`)
 .setDescription(`Select the command you want to use below.`) 
@@ -49,13 +49,13 @@ const row2 = new MessageActionRow().addComponents(
                 .setEmoji(""),
 )
 
-const message = await interaction.reply({embeds: [embed], components: [row, row2]})
+const message = await interaction.channel.send({embeds: [embed], components: [row, row2]})
 
 await client.economy.set(`economy_user_${message.id}`, `${interaction.user.id}`)
 
     setTimeout(async () => {
 await client.economy.delete(`economy_user_${message.id}`)
-message.edit({content: `${await client.emoji.fetch(`no`)} This command has expired.`, embeds: [], components: []})
+message.delete()
 }, 300000)
 
 } 
