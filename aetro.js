@@ -13,6 +13,11 @@ const app = express()
 const Canvas = require('canvas') 
 const fetch = ("node-fetch");
 const fs = require("fs");
+const xp = require('simply-xp')
+
+xp.connect("mongodb+srv://ugur:ub30082324ub@cluster0.6bouhif.mongodb.net/?retryWrites=true&w=majority", {
+  notify: true
+})
 
 const {
     JsonDatabase,
@@ -55,6 +60,9 @@ const message = new JsonDatabase({
 const emoji = new JsonDatabase({
     databasePath:"./databases/Emojis/emojis.json" 
 });
+const level = new JsonDatabase({
+    databasePath:"./databases/Level/level.json" 
+});
 
 client.komut = komut
 client.verifieduser = verifieduser
@@ -68,6 +76,7 @@ client.poll = poll
 client.ticket = ticket
 client.message = message
 client.emoji = emoji
+client.level = level
 
 client.login("");
 
@@ -80,6 +89,43 @@ await client.coin.add(`coin_${message.guild.id}_${message.author.id}`,1)
 await client.message.add(`toplam_mesaj_${message.guild.id}_${message.author.id}`,1)
 }
    })
+
+client.on('messageCreate', async (message) => {
+  if (!message.guild) return
+  if (message.author.bot) return
+if(await client.level.fetch(`durum_${message.guild.id}`)) {
+
+  const random = Math.floor(Math.random() * 14) + 1 // Min 1, Max 30
+  xp.addXP(message, message.author.id, message.guild.id, random)
+
+}else {
+return;
+}
+})
+
+client.on('levelUp', async (message, data) => {
+if(await client.level.fetch(`kanal_${message.guild.id}`)) {
+let kanal = client.channels.cache.get(await client.level.fetch(`kanal_${message.guild.id}`))
+const embed = new Discord.MessageEmbed()
+.setDescription(`🎉 Congratulations, you\'ve leveled up! ( **${Number(data.level-1)} -> ${data.level}** )`)
+const row = new MessageActionRow() 
+.addComponents(
+new MessageButton() 
+.setStyle("LINK") 
+.setEmoji(``)
+.setLabel("Member") 
+.setURL(`https://discord.com/users/${message.author.id}`) 
+);
+kanal.send({content: `${message.author}`, embeds: [embed], components: [row]})
+}else {
+const embed = new Discord.MessageEmbed()
+.setDescription(`🎉 Congratulations, you\'ve leveled up! ( **${Number(data.level-1)} -> ${data.level}** )`)
+const msg = await kanal.send({content: `${message.author}`, embeds: [embed]})
+setTimeout(async () => {
+msg.delete()
+}, 10000)
+}
+})
 
 require("./utils/slash-loader.js")(client)
 
