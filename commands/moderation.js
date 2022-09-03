@@ -18,7 +18,7 @@ if(!interaction.member.permissions.has('ADMINISTRATOR')){
         }
 
 const embed = new Discord.MessageEmbed()
-.setTitle(`⚒️` Moderation commands)
+.setTitle(`⚒️ Moderation commands`)
 .setDescription(`Select the command you want to use below.`) 
 
 const row = new MessageActionRow().addComponents(
