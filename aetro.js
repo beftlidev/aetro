@@ -646,40 +646,48 @@ interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own th
 
 
 if(interaction.customId == "wg_yes") {
+if(await client.moderation.fetch(`moderation_user_${interaction.message.id}`) === interaction.user.id) {
 
 await client.channel.set(`welcome_goodbye_${interaction.guild.id}`, `${interaction.channelId}`)
 
 const embed = new Discord.MessageEmbed()
 .setDescription(`${await client.emoji.fetch(`yes`)} Channel set to (welcome - goodbye)!`)
 
-interaction.update({embeds: [embed]})
-
+interaction.channel.send({embeds: [embed]})
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
 }
 
 if(interaction.customId == "wg_no") {
+if(await client.moderation.fetch(`moderation_user_${interaction.message.id}`) === interaction.user.id) {
 
 
 const embed = new Discord.MessageEmbed()
 .setDescription(`${await client.emoji.fetch(`yes`)} Transaction cancelled!`)
 
-interaction.update({embeds: [embed]})
-
+interaction.channel.send({embeds: [embed]})
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
 }
 
 if(interaction.customId == "wg_off") {
- 
+ if(await client.moderation.fetch(`moderation_user_${interaction.message.id}`) === interaction.user.id) {
+
 await client.channel.delete(`welcome_goodbye_${interaction.guild.id}`, `${interaction.channelId}`)
 
 const embed = new Discord.MessageEmbed()
 .setDescription(`${await client.emoji.fetch(`yes`)} (welcome - goodbye) has been deactivated!`)
 
-interaction.update({embeds: [embed]})
-
+interaction.channel.send({embeds: [embed]})
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
 }
 
 })
 
-// üye giriş çıkış ekle
 
 
 client.on('guildMemberAdd', async(interaction) => {
@@ -791,8 +799,135 @@ return;
 
 })
 
+client.on("interactionCreate", async (interaction) => {
 
-// level ekle
+if(interaction.customId == "level_yes") {
+if(await client.level.fetch(`level_user_${interaction.message.id}`) === interaction.user.id) {
+await client.level.set(`durum_${interaction.guild.id}`, "aktif")
+const embed = new Discord.MessageEmbed()
+.setDescription(`${await client.emoji.fetch(`yes`)} Level system activated!`)
+interaction.update({embeds: [embed], components: []})
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+}
+
+if(interaction.customId == "level_no") {
+interaction.message.delete()
+}
+
+if(interaction.customId == "rank") {
+
+if(await client.level.fetch(`level_user_${interaction.message.id}`) === interaction.user.id) {
+
+   let member = interaction.user.id
+xp.rank(interaction, member, interaction.guild.id, {
+ background: "https://i.ibb.co/QQvMqf7/gradient.jpg",
+  color: '#808080' 
+}).then((img) => {
+  const embed = new Discord.MessageEmbed()
+  .setImage("attachment://rank.png")
+  interacton.channel.send({ embeds: [embed], files: [img], components: [] })
+})
+
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+}
+}
+
+if(interaction.customId == "leaderboard") {
+
+if(await client.level.fetch(`level_user_${interaction.message.id}`) === interaction.user.id) {
+
+await xp.leaderboard(client, message.guild.id).then(board => {
+   let lead = []
+
+     board.forEach(user => {
+       lead.push(`• ${user.tag} - XP: ${user.shortxp}`)
+     })
+
+if(lead.length <= 1) {
+    lead = 'No One is in the leaderboard'
+}
+
+const embed = new Discord.MessageEmbed()
+.setDescription(` ${lead.toString().replaceAll(',', '\n')} `)
+
+     interaction.channel.send({ embeds: [embed], components: []})
+
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+
+}
+}
+
+if(interaction.customId == "level_channel") {
+const addModal = require("../helpers/addModal")
+const {
+    TextInputComponent,
+    Modal,
+} = require("discord.js") 
+if(await client.level.fetch(`level_user_${interaction.message.id}`) === interaction.user.id) {
+
+        const rows = [
+            new MessageActionRow().addComponents(
+                new TextInputComponent()
+                    .setCustomId("channel")
+                    .setLabel("Channel")
+                    .setPlaceholder("Which channel would you like to level up log? ❔ Example: level-log")
+                    .setRequired(true)
+                    .setStyle("PARAGRAPH")
+            ),
+]
+
+const modal = new Modal()
+            .setCustomId(`modal-${interaction.id}`)
+            .addComponents(rows)
+            .setTitle("Set level channel")
+
+        const modalSubmitInteraction = await addModal(interaction, modal)
+        const channel = modalSubmitInteraction.fields.getTextInputValue("channel")
+
+let a = message.guild.channels.cache.find(kanal => kanal.name === channel)
+
+if(a) {
+await client.level.set(`kanal_${message.guild.id}`, `${a.channelId}`)
+const embed = new Discord.MessageEmbed()
+.setDescription(`${await client.emoji.fetch(`yes`)} Level log is set!`)
+interaction.channel.send({embeds: [embed], components: []})
+} else {
+const embed = new Discord.MessageEmbed()
+.setDescription(`${await client.emoji.fetch(`no`)} The channel you specified was not found, please try again! Make sure you don\'t prefix it with a #.`)
+interaction.channel.send({embeds: [embed], components: []})
+} 
+
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+
+}
+
+}
+
+if(interaction.customId == "level_close") {
+
+if(await client.level.fetch(`level_user_${interaction.message.id}`) === interaction.user.id) {
+await client.level.delete(`durum_${interaction.guild.id}`)
+const embed = new Discord.MessageEmbed()
+.setDescription(`${await client.emoji.fetch(`yes`)} Level system deactivated!`)
+interaction.channel.send({embeds: [embed], components: []})
+
+} else {
+interaction.reply({content: `${await client.emoji.fetch(`no`)} You do not own this message!`, ephemeral: true})
+}
+
+}
+
+}
+
+})
 
 client.on("messageCreate", message => {
   if (message.channel.type === "dm") return;
