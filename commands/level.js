@@ -9,7 +9,7 @@ module.exports = {
     description: "🔮 It helps you to use level commands.",
   },
     run: async (client, interaction) => {
-
+await interaction.deferReply()
 if(!await client.level.fetch(`durum_${interaction.guild.id}`) {
 
 if(!interaction.member.permissions.has('ADMINISTRATOR')){
@@ -34,7 +34,7 @@ const row = new MessageActionRow().addComponents(
                 .setEmoji(""),
 )
 
-const message = await interaction.reply({embeds: [embed], components: [row]})
+const message = await interaction.channel.send({embeds: [embed], components: [row]})
 await client.level.set(`level_user_${message.id}`, `${interaction.user.id}`)
     setTimeout(async () => {
 await client.level.delete(`level_user_${message.id}`)
@@ -73,7 +73,7 @@ const row = new MessageActionRow().addComponents(
 
 if(interaction.member.permissions.has('ADMINISTRATOR')) {
 
-const message = await interaction.reply({embeds: [embed], components: [row, row2]})
+const message = await interaction.channel.send({embeds: [embed], components: [row, row2]})
 await client.level.set(`level_user_${message.id}`, `${interaction.user.id}`)
     setTimeout(async () => {
 await client.level.delete(`level_user_${message.id}`)
@@ -82,7 +82,7 @@ message.delete()
 
 } else {
 
-const message = await interaction.reply({embeds: [embed], components: [row]})
+const message = await interaction.channel.send({embeds: [embed], components: [row]})
 await client.level.set(`level_user_${message.id}`, `${interaction.user.id}`)
     setTimeout(async () => {
 await client.level.delete(`level_user_${message.id}`)
