@@ -16,7 +16,7 @@ const embed = new Discord.MessageEmbed()
 
 const row = new MessageActionRow().addComponents(
             new MessageButton()
-                .setCustomId('info')
+                .setCustomId('eco_info')
                 .setLabel("Info")
                 .setStyle("SUCCESS")
                 .setEmoji(""),
