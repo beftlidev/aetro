@@ -39,7 +39,7 @@ const message = await interaction.reply({embeds: [embed], components: [row]})
 await client.moderation.set(`moderation_user_${message.id}`, `${interaction.user.id}`)
 
     setTimeout(async () => {
-await client.moderatiom.delete(`moderation_user_${message.id}`)
+await client.moderation.delete(`moderation_user_${message.id}`)
 message.edit({content: `${await client.emoji.fetch(`no`)} This command has expired.`, embeds: [], components: []})
 }, 300000)
 
