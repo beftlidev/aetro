@@ -21,7 +21,12 @@ let mesaj = await client.message.fetch(`toplam_mesaj_${interaction.guild.id}_${u
 
 let a;
 let c;
-let activities = interaction.guild.members.cache.get(message.author.id).presence.activities.length
+let activities;
+try {
+activities = interaction.guild.members.cache.get(message.author.id).presence.activities.length;
+} catch(e) {
+activities = "bos";
+}
 if(a == "Custom Status") {
 } else if(activities == 2) {
 a = interaction.guild.members.cache.get(user.id).presence.activities[1].name;
@@ -29,7 +34,7 @@ c = interaction.guild.members.cache.get(user.id).presence.activities[1];
 } else if(activities == 1) {
 a = interaction.guild.members.cache.get(user.id).presence.activities[0].name;
 c = interaction.guild.members.cache.get(user.id).presence.activities[0];
-} else if(!activities) {
+} else if(activities == "bos") {
 a = "empty";
 }
 
@@ -54,7 +59,7 @@ let started = c.timestamps.start
 let today = Date.now() 
 elapsed = moment.utc(today).format("x") - moment.utc(started).format("x")
 
-} else if(!activities) {
+} else if(activities == "bos") {
 }
 
 let b;
