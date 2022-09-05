@@ -17,83 +17,139 @@ module.exports = {
 
 const user = interaction.options.getUser('user') || interaction.user
 
-let u;
- var d = await client.users.fetch(user.id, {force: true}) 
-let banner = d.banner
-if(banner) {
-u = `${d.bannerURL({ dynamic: true, size: 2048 })}`;
-} else {
-u = "https://media.discordapp.net/attachments/973462223383064586/994627983463686244/Picsart_22-06-19_13-20-01-167.jpg";
-}
-
 let mesaj = await client.message.fetch(`toplam_mesaj_${interaction.guild.id}_${user.id}`) 
-
-const embed = new Discord.MessageEmbed()
-.setTitle(`${user.tag} ( ${user.id} )`)
-.setThumbnail(user.displayAvatarURL({ dynamic: true, size: 2048, format: 'png' }))
-.setDescription(`💭 Total messages you sent: ${mesaj || "He never texted me."}`) 
-.setColor('BLUE')
-.setImage(`${u}`)
 
 let a;
 let c;
 let activities = interaction.guild.members.cache.get(message.author.id).presence.activities.length
-if(activities == 2) {
-a = interaction.guild.members.cache.get(message.author.id).presence.activities[1].name;
-c = interaction.guild.members.cache.get(message.author.id).presence.activities[1];
+if(a == "Custom Status") {
+} else if(activities == 2) {
+a = interaction.guild.members.cache.get(user.id).presence.activities[1].name;
+c = interaction.guild.members.cache.get(user.id).presence.activities[1];
 } else if(activities == 1) {
-a = interaction.guild.members.cache.get(message.author.id).presence.activities[0].name;
-c = interaction.guild.members.cache.get(message.author.id).presence.activities[0];
-} else if(activities == 0) {
+a = interaction.guild.members.cache.get(user.id).presence.activities[0].name;
+c = interaction.guild.members.cache.get(user.id).presence.activities[0];
+} else if(!activities) {
 a = "empty";
 }
 
-let b;
-if(a === "Spotify") {
-b = `${await client.emoji.fetch(`spotify`)} Listening to **Spotify**
-🎵 Song: [${c.details}](https://open.spotify.com/track/${c.ayncId})
-👥 Artist: ${c.state}
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>, End <t:${parseInt(c.timestamps.end / 1000)}:R>`;
-} else if(a === "Minecraft") {
-b = `${await client.emoji.fetch(`minecraft`)} Playing **Minecraft**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "Lunar Client") {
-b = `${await client.emoji.fetch(`lunarclient`)} Playing **Lunar Client**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "Visual Studio Code") {
-b = `${await client.emoji.fetch(`vsc`)} Playing **Visual Studio Code**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "ROBLOX") {
-b = `${await client.emoji.fetch(`roblox`)} Playing **ROBLOX**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "YouTube") {
-b = `${await client.emoji.fetch(`youtube`)} Watching **YouTube**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "CraftRise") {
-b = `${await client.emoji.fetch(`craftrise`)} Playing **CraftRise**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "SonOyuncu Minecraft Client") {
-b = `${await client.emoji.fetch(`so`)} Playing **SonOyuncu Minecraft Client**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "VALORANT") {
-b = `${await client.emoji.fetch(`valorant`)} Playing **VALORANT**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "LabyMod") {
-b = `${await client.emoji.fetch(`labymod`)} Playing **LabyMod**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "League of Legends") {
-b = `${await client.emoji.fetch(`lol`)} Playing **League of Legends**
-⏰ Start: <t:${parseInt(c.timestamps.start / 1000)}:R>`;
-} else if(a === "empty") {
-b = `❔ Nothing is playing.`;
+let yetki;
+if(interaction.member.permissions.has('ADMINISTRATOR')) {
+yetki = "Admin";
 } else {
-b = `❔ Nothing is playing.`;
+yetki = "Member";
 }
 
-const embed2 = new Discord.MessageEmbed()
-.setDescription(`${b}`)
+let elapsed;
+if(a === "Custom Status") {
+} else if(activities == 2) {
 
-interaction.reply({embeds: [embed, embed2]})
+let started = c.timestamps.start
+let today = Date.now() 
+elapsed = moment.utc(today).format("x") - moment.utc(started).format("x")
+
+} else if(activities == 1) {
+
+let started = c.timestamps.start
+let today = Date.now() 
+elapsed = moment.utc(today).format("x") - moment.utc(started).format("x")
+
+} else if(!activities) {
+}
+
+let b;
+let logo;
+if(a === "Spotify") {
+b = `Listening to Spotify
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "Minecraft") {
+b = `Playing Minecraft
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "Lunar Client") {
+b = `Playing Lunar Client
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "Visual Studio Code") {
+b = `Playing Visual Studio Code
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "ROBLOX") {
+b = `Playing ROBLOX
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "YouTube") {
+b = `Watching YouTube
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "CraftRise") {
+b = `Playing CraftRise
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "SonOyuncu Minecraft Client") {
+b = `Playing SonOyuncu Minecraft Client
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "VALORANT") {
+b = `Playing VALORANT
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "LabyMod") {
+b = `Playing LabyMod
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "League of Legends") {
+b = `Playing League of Legends
+${moment(elapsed).format("HH:mm:ss")} elapsed`;
+logo = "";
+} else if(a === "empty") {
+b = `Nothing is playing.`;
+logo = "";
+} else if(a === "Custom Status") {
+} else {
+b = `Nothing is playing.`;
+logo = "";
+}
+
+    const applyText = (canvas, text) => {
+	const context = canvas.getContext('2d');
+	let fontSize = 70;
+	do {
+		context.font = `25px montserrat-bold`;
+	} while (context.measureText(text).width > canvas.width - 300);
+	return context.font;
+};
+
+let mev = `https://media.discordapp.net/attachments/1008041770459869275/1016368253645377647/Canavas_for_cheesey.png`
+let userinfo = {};
+userinfo.dctarih = moment.utc(interaction.guild.members.cache.get(user.id).user.createdAt).format('DD/MM/YYYY')
+userinfo.dctarihkatilma = moment.utc(interaction.guild.members.cache.get(user.id).joinedAt).format('DD/MM/YYYY')
+const canvas = Canvas.createCanvas(1000, 500);
+const context = canvas.getContext('2d');
+const background = await Canvas.loadImage(mev);
+context.drawImage(background, 0, 0, canvas.width, canvas.height);
+context.strokeStyle = '#0099ff';
+context.strokeRect(0, 0, canvas.width, canvas.height);
+context.font = applyText(canvas, `Your participation confirmed!`);
+context.fillStyle = '#ffffff';
+context.fillText(`${user.tag}`, 135, 325);
+context.fillText(`${b}`, 175, 385);
+context.fillText(`${yetki}`, 585, 125);
+context.fillText(`${mesaj}`, 585, 225);
+context.fillText(`${userinfo.dctarihkatilma}`, 585, 325);
+context.fillText(`${userinfo.dctarih}`, 585, 425);
+const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'jpg' }));
+context.drawImage(avatar, 195, 95, 160, 160);
+    const av = await Canvas.loadImage(logo);
+context.drawImage(av, 135, 355, 35, 35);
+const attachment = new MessageAttachment(canvas.toBuffer(), 'profile.png');
+
+const embed = new Discord.MessageEmbed()
+.setColor('BLUE')
+.setImage(`attachment://profile.png`)
+
+interaction.reply({embeds: [embed], files: [attachment]})
 
 } 
 }
