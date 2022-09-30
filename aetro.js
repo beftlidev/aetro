@@ -15,7 +15,7 @@ const fetch = ("node-fetch");
 const fs = require("fs");
 const xp = require('simply-xp')
 
-xp.connect("mongodb+srv://ugur:ub30082324ub@cluster0.6bouhif.mongodb.net/?retryWrites=true&w=majority", {
+xp.connect("", {
   notify: true
 })
 
